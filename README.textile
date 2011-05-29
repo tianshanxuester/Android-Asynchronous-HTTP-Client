@@ -1,0 +1,45 @@
+h3. *Simple Android Asynchronous HTTP Client*
+
+A minimal HTTP client for android. The HttpClient class provides the base methods for handling the asynchronous behavior. Extend the HttpClient to implement your own custom requests (See com.yfzhang.utils.net.ExampleClient). The HTTP client should be associated without the activity lifecycle. Also, a lightweight multi-threading package (com.yfzhang.utils.thread) is included. Instantiate the TaskManager to help create new worker threads and handle task completion callbacks. The TaskCallback interface should be used to implement the callback method that will be executed on the caller's thread.
+
+How to instantiate the client
+
+<pre><code>
+private ExampleClient exampleClient
+
+@Override
+public void onCreate(Bundle savedInstanceState) {
+  super.onCreate(savedInstanceState); 
+  exampleClient = new ExampleClient();
+  // Do rest of initialization
+}
+	
+@Override
+public void onResume() {
+  super.onResume();
+  exampleClient.activate();
+}
+	
+@Override
+public void onPause() {
+  super.onPause();
+  exampleClient.shutdown();
+}
+</code></pre>
+
+Example of how to use the client for an asynchronous call
+
+<pre><code>
+public void onSomeEvent() {
+  TaskCallback<HttpResponse> callback = new TaskCallback<HttpResponse>() {
+    public void executeCallback(int id, boolean interrupted, HttpResponse result) {
+      // This callback will be executed on the caller's thread
+      if(result.getResponseCode() == ExampleClient.HTTP_SUCCESSFUL) {
+        // Do something useful	
+      }
+    }
+  };
+  // A hypothetical call.
+  exampleClient.verifyUserCredentials("some auth token", 0, callback, 0);
+}
+</code></pre>

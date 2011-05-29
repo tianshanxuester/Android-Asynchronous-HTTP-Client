@@ -1,0 +1,10 @@
+# eclipse based IDE project files
+.project
+.tmp_*
+
+# Intellij IDE project files
+.idea/*
+*.iml
+
+# Mac filesystem hidden file
+.DS_Store
